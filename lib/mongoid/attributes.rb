@@ -143,6 +143,10 @@ module Mongoid #:nodoc:
     end
     alias :attributes= :write_attributes
 
+    # Stub _destroy
+    def _destroy
+    end
+
     protected
     # apply default values to attributes - calling procs as required
     def default_attributes

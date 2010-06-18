@@ -80,6 +80,10 @@ describe Mongoid::Attributes do
             @person.favorites.size.should == 1
             @person.favorites.first.title.should == "Jello"
           end
+
+          it "sets a _destroy method on the associated object" do
+            @person.favorites.first.should respond_to(:_destroy)
+          end
         end
 
         context "when :limit is set to 5" do
