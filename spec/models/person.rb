@@ -38,6 +38,7 @@ class Person
     end
   end
 
+  embeds_one :partner, :allow_destroy => true
   embeds_one :pet, :class_name => "Animal"
   embeds_one :name do
     def extension
@@ -52,6 +53,7 @@ class Person
   accepts_nested_attributes_for :name, :update_only => true
   accepts_nested_attributes_for :pet
   accepts_nested_attributes_for :favorites, :allow_destroy => true, :limit => 5
+  accepts_nested_attributes_for :partner, :allow_destroy => true
 
   references_one :game do
     def extension

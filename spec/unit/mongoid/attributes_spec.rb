@@ -193,6 +193,49 @@ describe Mongoid::Attributes do
           @person.name.last_name.should == "Torres"
         end
 
+        context "when :allow_destroy is enabled" do
+          before do
+            @person.build_partner(:name => "Eva")
+          end
+
+          shared_examples_for "an item with a destroyed embeds-one" do
+            it "removes that destroyed item" do
+              @person.partner.should be_nil
+            end
+          end
+
+          context "when an association has _destroy set to true" do
+            before(:each) do
+              @person.partner_attributes = { "_destroy" => true }
+            end
+
+            it_should_behave_like "an item with a destroyed embeds-one"
+          end
+
+          context "when an association has _destroy set to 1" do
+            before(:each) do
+              @person.partner_attributes = { "_destroy" => 1 }
+            end
+
+            it_should_behave_like "an item with a destroyed embeds-one"
+          end
+
+          context "when an association has _destroy set to '1'" do
+            before(:each) do
+              @person.partner_attributes = { "_destroy" => "1" }
+            end
+
+            it_should_behave_like "an item with a destroyed embeds-one"
+          end
+
+          context "when an association has _destroy set to 'true" do
+            before(:each) do
+              @person.partner_attributes = { "_destroy" => "true" }
+            end
+
+            it_should_behave_like "an item with a destroyed embeds-one"
+          end
+        end
       end
 
     end
