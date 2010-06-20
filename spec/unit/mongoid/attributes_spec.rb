@@ -70,18 +70,64 @@ describe Mongoid::Attributes do
             @person = Person.new(:title => "Sir", :ssn => "555-66-9999")
             @person.favorites.build(:title => "Ice Cream")
             @person.favorites.build(:title => "Jello")
-            @attributes = {
-              "0" => { "_destroy" => "true" }
-            }
-            @person.favorites_attributes = @attributes
           end
 
-          it "removes the items that have _destroy => true set" do
-            @person.favorites.size.should == 1
-            @person.favorites.first.title.should == "Jello"
+          shared_examples_for "an item with a destroyed embeds-many" do
+            it "removes that destroyed item" do
+              @person.favorites.size.should == 1
+              @person.favorites.first.title.should == "Jello"
+            end
           end
 
-          it "sets a _destroy method on the associated object" do
+          context "when an association has _destroy set to true" do
+            before(:each) do
+              @person.favorites_attributes = {
+                "0" => { "_destroy" => true },
+                "1" => { "_destroy" => false,
+                         "title"    => "Jello" }
+              }
+            end
+
+            it_should_behave_like "an item with a destroyed embeds-many"
+          end
+
+          context "when an association has _destroy set to 1" do
+            before(:each) do
+              @person.favorites_attributes = {
+                "0" => { "_destroy" => 1 },
+                "1" => { "_destroy" => 0,
+                         "title"    => "Jello" }
+              }
+            end
+
+            it_should_behave_like "an item with a destroyed embeds-many"
+          end
+
+          context "when an association has _destroy set to '1'" do
+            before(:each) do
+              @person.favorites_attributes = {
+                "0" => { "_destroy" => "1" },
+                "1" => { "_destroy" => "0",
+                         "title"    => "Jello" }
+              }
+            end
+
+            it_should_behave_like "an item with a destroyed embeds-many"
+          end
+
+          context "when an association has _destroy set to 'true'" do
+            before(:each) do
+              @person.favorites_attributes = {
+                "0" => { "_destroy" => "true" },
+                "1" => { "_destroy" => "false",
+                         "title"    => "Jello" }
+              }
+            end
+
+            it_should_behave_like "an item with a destroyed embeds-many"
+          end
+
+          it "sets a _destroy method on the association" do
             @person.favorites.first.should respond_to(:_destroy)
           end
         end

@@ -177,7 +177,7 @@ module Mongoid #:nodoc:
       def nested_build(attributes, options = {})
         attributes.each do |index, attrs|
           if document = detect { |document| document._index == index.to_i }
-            if options && options[:allow_destroy] && attrs['_destroy']
+            if options && options[:allow_destroy] && Boolean.set(attrs['_destroy'])
               @target.delete(document)
               document.destroy
             else
