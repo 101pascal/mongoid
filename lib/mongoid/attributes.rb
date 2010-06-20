@@ -143,7 +143,8 @@ module Mongoid #:nodoc:
     end
     alias :attributes= :write_attributes
 
-    # Stub _destroy
+    # Stubbed _destroy. This should actually return if the object is marked
+    # for deletion.
     def _destroy
     end
 
