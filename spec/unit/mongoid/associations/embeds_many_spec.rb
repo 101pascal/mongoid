@@ -59,6 +59,15 @@ describe Mongoid::Associations::EmbedsMany do
       @association.length.should == 4
     end
 
+    it "saves multiple additions" do
+      Person.delete_all
+      person = Person.create
+      person.addresses << Address.new(:street => "Old Street")
+      person.addresses << Address.new(:street => "Hoxton Street")
+      person.save
+      Person.last.addresses.count.should eql 2
+    end
+
     it "sets the index of the document in the array" do
       addr = Address.new
       @association << addr
