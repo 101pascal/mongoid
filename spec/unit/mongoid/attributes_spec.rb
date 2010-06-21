@@ -112,6 +112,20 @@ describe Mongoid::Attributes do
           end
         end
 
+        context "when adding new association on existing document" do
+          it "should have 2 addresses" do
+            Person.delete_all
+            @person = Person.create(:title => "Mr", :ssn => "1")
+            @person.addresses << Address.new(:street => "Somewhere")
+            @person.addresses << Address.new(:street => "Nice")
+            @person.addresses.size.should == 2
+            @person.save
+            person = Person.last
+            person.addresses.size.should == 2
+            person.addresses[0].street.should == "Somewhere"
+            person.addresses[1].street.should == "Nice"
+          end
+        end
       end
 
       context "on a has one association" do
