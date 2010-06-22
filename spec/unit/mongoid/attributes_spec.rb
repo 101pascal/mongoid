@@ -125,6 +125,22 @@ describe Mongoid::Attributes do
             person.addresses[0].street.should == "Somewhere"
             person.addresses[1].street.should == "Nice"
           end
+          
+          it "should also have 2 addresses" do
+            Person.delete_all
+            @person = Person.create(:title => "Mr", :ssn => "1")
+            Person.all.size.should == 1
+            person = Person.last
+            person.addresses.build(:street => "Somewhere")
+            person.addresses.build(:street => "Nice")
+            person.addresses.size.should == 2
+            person.valid?.should be_true
+            person.save
+            person = Person.last
+            person.addresses.size.should == 2
+            person.addresses[0].street.should == "Somewhere"
+            person.addresses[1].street.should == "Nice"
+          end
         end
       end
 
