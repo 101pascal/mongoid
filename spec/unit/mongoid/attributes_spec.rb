@@ -113,33 +113,37 @@ describe Mongoid::Attributes do
         end
 
         context "when adding new association on existing document" do
-          it "should have 2 addresses" do
+          before do
             Person.delete_all
             @person = Person.create(:title => "Mr", :ssn => "1")
+          end
+          
+          it "should have created a user in the db" do
+            Person.all.size.should == 1
+          end
+          
+          it "should have 2 addresses" do
             @person.addresses << Address.new(:street => "Somewhere")
             @person.addresses << Address.new(:street => "Nice")
             @person.addresses.size.should == 2
             @person.save
-            person = Person.last
-            person.addresses.size.should == 2
-            person.addresses[0].street.should == "Somewhere"
-            person.addresses[1].street.should == "Nice"
+            Person.last.addresses.size.should == 2
           end
           
           it "should also have 2 addresses" do
-            Person.delete_all
-            @person = Person.create(:title => "Mr", :ssn => "1")
-            Person.all.size.should == 1
-            person = Person.last
-            person.addresses.build(:street => "Somewhere")
-            person.addresses.build(:street => "Nice")
-            person.addresses.size.should == 2
-            person.valid?.should be_true
-            person.save
-            person = Person.last
-            person.addresses.size.should == 2
-            person.addresses[0].street.should == "Somewhere"
-            person.addresses[1].street.should == "Nice"
+            @person.addresses.build(:street => "Somewhere")
+            @person.addresses.build(:street => "Nice")
+            @person.addresses.size.should == 2
+            @person.save
+            Person.last.addresses.size.should == 2
+          end
+          
+          it "should also have 2 addresses, this time with create" do
+            @person.addresses.create(:street => "Somewhere")
+            @person.addresses.create(:street => "Nice")
+            @person.addresses.size.should == 2
+            @person.save
+            Person.last.addresses.size.should == 2
           end
         end
       end
