@@ -15,7 +15,7 @@ describe "Embedded Bugs Uno" do
     end
 
     it "seems not to be the case as per the database" do
-      Person.last.addresses.count.should eql 2
+      @person.reload.addresses.count.should eql 2
     end
   end
 
@@ -34,7 +34,7 @@ describe "Embedded Bugs Uno" do
     end
 
     it "seems not to be the case as per the database" do
-      Person.last.addresses.count.should eql 2
+      @person.reload.addresses.count.should eql 2
     end
   end
 end
