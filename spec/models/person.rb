@@ -42,6 +42,7 @@ class Person
   end
 
   embeds_one :pet, :class_name => "Animal"
+  embeds_one :partner
   embeds_one :name do
     def extension
       "Testing"
@@ -54,6 +55,7 @@ class Person
   accepts_nested_attributes_for :addresses, :reject_if => lambda { |attrs| attrs["street"].blank? }
   accepts_nested_attributes_for :name, :update_only => true
   accepts_nested_attributes_for :pet
+  accepts_nested_attributes_for :partner, :allow_destroy => true
   accepts_nested_attributes_for :favorites, :allow_destroy => true, :limit => 5
 
   references_one :game do
