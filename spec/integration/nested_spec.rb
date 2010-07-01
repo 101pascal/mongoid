@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "Nested Forms" do
+describe "Nested Attributes + Has Many" do
 
   before(:each) do
     Person.delete_all
