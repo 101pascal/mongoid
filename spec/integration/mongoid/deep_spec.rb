@@ -5,8 +5,6 @@ describe "finicky call-backs in deeply-embedded relationships" do
   before(:each) do
     @foo = Foo.create(:name => "foo")
     @bar = @foo.bars.create(:name => "bar")
-    # an aside : Would be consistent with the DSL to be able to do @bar.bazes.create...
-    #
   end
 
   it "works" do
