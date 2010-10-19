@@ -86,12 +86,12 @@ describe Mongoid::Criterion::Inclusion do
       context "on the same fields" do
 
         before do
-          criteria.any_of( {:field1 => "test" }, { :field1 => "testy" })
+          criteria.any_of( {:field1 => "test" }, { :field1.lt => "testy" })
         end
 
         it "adds the $or criteria to the selector" do
           criteria.selector.should ==
-            { "$or" => [ { :field1 => "test" }, { :field1 => "testy" } ] }
+            { "$or" => [ { :field1 => "test" }, { :field1 => { "$lt" => "testy" } } ] }
         end
       end
     end
@@ -154,6 +154,17 @@ describe Mongoid::Criterion::Inclusion do
           criteria.where(:title => "Title", :text => "Text")
           criteria.selector.should ==
             { :title => "Title", :text => "Text" }
+        end
+
+        context "when field defined as an array" do
+
+          before do
+            criteria.where(:aliases => "007")
+          end
+
+          it "allows a single value to be passed" do
+            criteria.selector.should == { :aliases => "007" }
+          end
         end
       end
 
